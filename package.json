@@ -1,5 +1,5 @@
 {
-  "name": "field-container",
+  "name": "@toxus/field-container",
   "version": "0.0.1",
   "description": "The container that hold the field changes",
   "main": "index.js",
@@ -22,4 +22,7 @@
     "type": "git",
     "url": "https://github.com/toxus/field-container"
   },
+  "engines": {
+    "node": ">=4.2.4"
+  }
 }
