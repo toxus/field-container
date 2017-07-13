@@ -1,0 +1,54 @@
+{
+  "sheet": "Blad1",
+  "startRow": 2,
+  "columnNames": {
+    "A": "ID",
+    "B": "voornaam",
+    "C": "tussenvoegsel",
+    "D": "achternaam",
+    "E": "bedrijf",
+    "F": "email",
+    "G": "telefoon",
+    "H": "fax",
+    "I": "straat",
+    "J": "nummer",
+    "K": "postcode",
+    "L": "plaats",
+    "M": "land"
+  },
+  "columns": [
+    {
+      "type": "id",
+      "fieldName": "id",
+      "data": {
+        "value": "A"
+      }
+    },
+    {
+      "fieldName": "name",
+      "type": "name",
+      "required": 1,
+      "data": {
+        "firstName": "B",
+        "prefix": "C",
+        "lastName": "D",
+        "company": "E"
+      }
+    },
+    {
+      "fieldName": "telephone",
+      "type": "telephone",
+      "usage": ["telephone.mobile", "telephone.business"],
+      "data": {
+        "value": "G"
+      }
+    },
+    {
+      "fieldName": "email",
+      "type": "email",
+      "data": {
+        "value": "F"
+      }
+    }
+  ]
+}

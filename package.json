@@ -1,0 +1,25 @@
+{
+  "name": "field-container",
+  "version": "0.0.1",
+  "description": "The container that hold the field changes",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/jasmine-node spec"
+  },
+  "author": "Jaap van der Kreeft",
+  "license": "MIT",
+  "devDependencies": {
+    "jasmine": "^2.6.0",
+    "jasmine-node": "^1.14.5"
+  },
+  "dependencies": {
+    "@bassettsj/i18n-iso-countries": "^0.14.2",
+    "google-libphonenumber": "^3.0.0",
+    "joi": "^10.6.0",
+    "jsonfile": "^3.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/toxus/field-container"
+  },
+}
