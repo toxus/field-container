@@ -1,6 +1,8 @@
 /**
  * Created by jaap on 10/07/2017.
  */
+'use strict';
+
 const fieldContainerClass = require('../lib/fieldContainer');
 const rowTemplateClass = require('../lib/rowTemplate');
 
