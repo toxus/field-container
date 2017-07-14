@@ -17,7 +17,7 @@ npm install @toxus/field-container --save
 
 ## Usage
 
-Here's a simple example on how to format a US-based number in the international phone number format:
+A simple import statement
 
 ```js
 const rowTemplate = require('./lib/rowTemplate');
