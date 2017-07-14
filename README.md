@@ -5,7 +5,7 @@ A storage space for variable field record.
 ## Status
 
 [![npm version][npm-image]][npm-url]
-[![build status][travis-image]][travis-url]
+[![Build Status](https://travis-ci.org/toxus/field-container.svg?branch=master)](https://travis-ci.org/toxus/field-container)
 
 ## Installation
 
