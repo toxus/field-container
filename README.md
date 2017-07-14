@@ -36,3 +36,6 @@ fields.importRow(
   template
 );
 ```
+
+npm-image]: https://img.shields.io/npm/v/google-libphonenumber.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/google-libphonenumber
