@@ -299,3 +299,69 @@ describe("fieldContainer", function() {
      });
    })
  });
+
+describe('fieldContainer patching', function() {
+  const field1 = new fieldContainerClass();
+  const field2 = new fieldContainerClass();
+  const field3 = new fieldContainerClass();
+  const field4 = new fieldContainerClass();
+  const field5 = new fieldContainerClass();
+  let template = new rowTemplateClass();
+  template.readFile('../spec/rowTemplate.json');
+  field1.importRow(
+    {
+      A: '12345',
+      B: 'John',
+      C: 'the',
+      D: 'Bastard',
+      E: 'Google',
+      F: 'john@checkit.com',
+      G: '0612345678',
+      H: '',
+      I: 'Nowhere',
+      J: '1234',
+      K: '1017TE',
+      L: 'Amsterdam',
+      M: 'nl'
+    },
+    template
+  );
+  field2.importRow(
+    {
+      A: '12345',
+      B: 'John',
+      C: 'the',
+      D: 'Bastard',
+      E: 'Google',
+      F: 'test@checkit.com',
+      G: '0612345678',
+      H: '',
+      I: 'Nowhere',
+      J: '1234',
+      K: '1017TE',
+      L: 'Amsterdam',
+      M: 'nl'
+    },
+    template
+  );
+  field2.add('telephone2', 'telephone', {value: '12345'});
+  let diff2 = field1.diff(field2);
+  it('to have no errors', function() {
+    expect(field1.hasErrors()).toEqual(false);
+  });
+  field3.add('email', 'email', {value: 'xxxx'}); // it must have the email to update it
+  let undo = field3.patch(diff2);
+  it('to have new fields', function() {
+    //expect(field3).toEqual(1);
+    expect(field3.count()).toEqual(2);
+    expect(field3.get("telephone2").data.value).toEqual('12345')
+    expect(field3.get('email').data.value).toEqual('test@checkit.com')
+  });
+  it('has one update and one add', function() {
+ //   expect(undo).toEqual(1);
+    expect(undo.update().length).toEqual(1);
+    expect(undo.delete().length).toEqual(1);
+    expect(undo.add().length).toEqual(0);
+  });
+});
+
