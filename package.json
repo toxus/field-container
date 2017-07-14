@@ -1,12 +1,15 @@
 {
   "name": "@toxus/field-container",
-  "version": "0.0.1",
-  "description": "The container that hold the field changes",
+  "version": "0.1.0",
+  "description": "The container that holds the fields information",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/jasmine-node spec"
   },
-  "author": "Jaap van der Kreeft",
+  "author": {
+    "name" : "Jaap van der Kreeft",
+    "email" : "jaap@toxus.nl"
+  },
   "license": "MIT",
   "devDependencies": {
     "jasmine": "^2.6.0",

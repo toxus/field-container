@@ -106,7 +106,32 @@ describe("fieldContainer", function() {
       expect(fieldRow.getByName('telephone').name).toEqual('telephone');
       expect(fieldRow.getByName('not a field')).toEqual(false);
     });
+  });
 
+  describe('test delete', function() {
+    const fieldRow = new fieldsClass();
+
+    let template = new rowTemplate();
+    template.readFile('../spec/rowTemplate.json');
+
+    fieldRow.clear();
+
+    expect(fieldRow.count()).toEqual(0);
+    fieldRow.importRow(
+      {
+        A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
+      },
+      template
+    );
+
+    fieldRow.delete(2);
+    fieldRow.delete('name');
+    it('to remove a field by index', function() {
+      expect(fieldRow.count()).toEqual(2);
+      expect(fieldRow.getByName('id').name).toEqual('id');
+      expect(fieldRow.getByName('email').name).toEqual('email');
+      expect(fieldRow.getByName('telephone')).toEqual(false);
+    });
   });
 
   describe('import information with errors', function() {
@@ -145,6 +170,12 @@ describe("fieldContainer", function() {
       },
       template
     );
+    it('to have no errors', function() {
+      expect(fieldRow.hasErrors()).toEqual(false);
+    });
+    it('to have a record id', function () {
+      expect(fieldRow.id()).toEqual("12345");
+    });
     fieldRow.stardardize();
     it("to have no errors", function() {
       expect(fieldRow.hasErrors()).toEqual(false);
