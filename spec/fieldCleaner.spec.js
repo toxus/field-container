@@ -1,6 +1,7 @@
 /**
  * Created by jaap on 10/07/2017.
  */
+"use strict";
 
 var fieldCleaner = require('../lib/fieldCleaner');
 

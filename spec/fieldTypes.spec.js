@@ -1,7 +1,7 @@
 /**
  * Created by jaap on 10/07/2017.
  */
-
+"use strict";
 const fieldNamespace = require('../lib/fieldTypes');
 const fieldContainer = require('../lib/fieldContainer');
 

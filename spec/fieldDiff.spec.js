@@ -2,7 +2,7 @@
  * Created by jaap on 14/07/2017.
  * Test the diff container
  */
-
+"use strict";
 const fieldDiffClass = require('../lib/fieldDiff');
 
 describe('fieldDiff', function() {

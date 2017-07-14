@@ -1,7 +1,7 @@
 /**
  * Created by jaap on 12/07/2017.
  */
-
+"use strict";
 const rowClass = require('../lib/rowTemplate');
 
 describe('row template', function() {
