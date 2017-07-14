@@ -1,14 +1,14 @@
 {
   "name": "@toxus/field-container",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The container that holds the fields information",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/jasmine-node spec"
   },
   "author": {
-    "name" : "Jaap van der Kreeft",
-    "email" : "jaap@toxus.nl"
+    "name": "Jaap van der Kreeft",
+    "email": "jaap@toxus.nl"
   },
   "license": "MIT",
   "devDependencies": {
@@ -19,7 +19,8 @@
     "@bassettsj/i18n-iso-countries": "^0.14.2",
     "google-libphonenumber": "^3.0.0",
     "joi": "^10.6.0",
-    "jsonfile": "^3.0.1"
+    "jsonfile": "^3.0.1",
+    "lodash": "^4.17.4"
   },
   "repository": {
     "type": "git",

@@ -18,3 +18,12 @@ describe('row template', function() {
   })
 
 });
+
+describe('row template', function() {
+  var template = new rowClass();
+
+  it("throw duplicate error", function() {
+    expect(function() {template.readFile('../spec/rowTemplate.duplicate.json')}).toThrow(new Error('the field telephone is used multiple times'));
+  });
+
+});

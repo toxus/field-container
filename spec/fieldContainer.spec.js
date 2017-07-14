@@ -1,15 +1,15 @@
 /**
  * Created by jaap on 10/07/2017.
  */
-const fieldsClass = require('../lib/fieldContainer');
-const rowTemplate = require('../lib/rowTemplate');
+const fieldContainerClass = require('../lib/fieldContainer');
+const rowTemplateClass = require('../lib/rowTemplate');
 
 describe("fieldContainer", function() {
 
 
   describe("field manipulations:", function() {
     describe('adding and removing', function() {
-      const fields = new fieldsClass();
+      const fields = new fieldContainerClass();
       it("Has a count function", function() {
         expect(typeof fields.count).toEqual('function');
       });
@@ -54,7 +54,7 @@ describe("fieldContainer", function() {
     });
 
     describe('group action', function() {
-      const fields = new fieldsClass();
+      const fields = new fieldContainerClass();
 
       it("to remove all", function() {
         fields.clear();
@@ -76,9 +76,9 @@ describe("fieldContainer", function() {
   });
 
   describe('import information', function() {
-    const fieldRow = new fieldsClass();
+    const fieldRow = new fieldContainerClass();
 
-    let template = new rowTemplate();
+    let template = new rowTemplateClass();
     template.readFile('../spec/rowTemplate.json');
 
     fieldRow.clear();
@@ -102,16 +102,16 @@ describe("fieldContainer", function() {
       expect(fieldRow.hasErrors()).toEqual(false);
     });
     it('to find by name', function() {
-      expect(fieldRow.getByName('id').name).toEqual('id');
-      expect(fieldRow.getByName('telephone').name).toEqual('telephone');
-      expect(fieldRow.getByName('not a field')).toEqual(false);
+      expect(fieldRow.get('id').name).toEqual('id');
+      expect(fieldRow.get('telephone').name).toEqual('telephone');
+      expect(fieldRow.get('not a field')).toEqual(false);
     });
   });
 
   describe('test delete', function() {
-    const fieldRow = new fieldsClass();
+    const fieldRow = new fieldContainerClass();
 
-    let template = new rowTemplate();
+    let template = new rowTemplateClass();
     template.readFile('../spec/rowTemplate.json');
 
     fieldRow.clear();
@@ -128,16 +128,16 @@ describe("fieldContainer", function() {
     fieldRow.delete('name');
     it('to remove a field by index', function() {
       expect(fieldRow.count()).toEqual(2);
-      expect(fieldRow.getByName('id').name).toEqual('id');
-      expect(fieldRow.getByName('email').name).toEqual('email');
-      expect(fieldRow.getByName('telephone')).toEqual(false);
+      expect(fieldRow.get('id').name).toEqual('id');
+      expect(fieldRow.get('email').name).toEqual('email');
+      expect(fieldRow.get('telephone')).toEqual(false);
     });
   });
 
   describe('import information with errors', function() {
-    const fieldRow = new fieldsClass();
+    const fieldRow = new fieldContainerClass();
 
-    let template = new rowTemplate();
+    let template = new rowTemplateClass();
     template.readFile('../spec/rowTemplate.json');
 
     fieldRow.clear();
@@ -158,8 +158,8 @@ describe("fieldContainer", function() {
   });
 
   describe("standarizing the row", function() {
-    const fieldRow = new fieldsClass();
-    let template = new rowTemplate();
+    const fieldRow = new fieldContainerClass();
+    let template = new rowTemplateClass();
     template.readFile('../spec/rowTemplate.json');
     fieldRow.clear();
     expect(fieldRow.count()).toEqual(0);
@@ -182,12 +182,118 @@ describe("fieldContainer", function() {
       expect(fieldRow.errors()).toEqual([]);
     });
     it('to have a proper name', function() {
-      expect(fieldRow.getByName('name').data.firstName).toEqual('John')
+      expect(fieldRow.get('name').data.firstName).toEqual('John')
     });
     it('to have a telephone with layout', function() {
-      expect(fieldRow.getByName('telephone').data).toEqual({ value : '+31-6-12345678' });
+      expect(fieldRow.get('telephone').data).toEqual({ value : '+31-6-12345678' });
     })
 
   })
 
 });
+
+ describe('fieldContainer changes', function() {
+   const field1 = new fieldContainerClass();
+   const field2 = new fieldContainerClass();
+   const field3 = new fieldContainerClass();
+   const field4 = new fieldContainerClass();
+   const field5 = new fieldContainerClass();
+   let template = new rowTemplateClass();
+   template.readFile('../spec/rowTemplate.json');
+   field1.importRow(
+     {
+       A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
+     },
+     template
+   );
+   field2.importRow(
+     {
+       A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
+     },
+     template
+   );
+   field3.importRow(
+     {
+       A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'+31-0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
+     },
+     template
+   );
+   field4.importRow(
+     {
+       A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
+     },
+     template
+   );
+   field5.importRow(
+     {
+       A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
+     },
+     template
+   );
+
+
+   let diff = field1.diff(field2);
+   it('to have no changes', function() {
+     expect(diff.hasAction()).toEqual(false);
+   });
+   it('no add', function() {
+     expect(diff.add()).toEqual([]);
+   });
+   it('no update', function() {
+     expect(diff.update()).toEqual([]);
+   });
+   it('no delete', function() {
+     expect(diff.delete()).toEqual([]);
+   });
+
+   let diff2 = field1.diff(field3);
+   it('to have changes', function() {
+     expect(diff2.hasAction()).toEqual(true);
+   });
+   it('no add', function() {
+     expect(diff2.add()).toEqual([]);
+   });
+   it('one update', function() {
+     expect(diff2.update().length).toEqual(1);
+     expect(diff2.update()[0].field.data.value).toEqual('+31-0612345678');
+   });
+   it('no delete', function() {
+     expect(diff2.delete()).toEqual([]);
+   });
+
+   field4.add('telephone2', "telephone", { value: '+31-5555555'});
+   //expect(field4).toEqual('');
+   let diff3 = field1.diff(field4);
+   it('to have changes', function() {
+     expect(diff3.hasAction()).toEqual(true);
+   });
+   it('one add', function() {
+     expect(diff3.add().length).toEqual(1);
+     expect(diff3.add()[0].field.name).toEqual('telephone2');
+     expect(diff3.add()[0].field.data).toEqual({ value: '+31-5555555'});
+   });
+   it('no update', function() {
+     expect(diff3.update().length).toEqual(0);
+   });
+   it('no delete', function() {
+     expect(diff3.delete()).toEqual([]);
+   });
+
+   describe('check delete field', function() {
+     field5.delete('telephone');
+
+     let diff4 = field1.diff(field5);
+     it('to have changes', function() {
+       expect(diff4.hasAction()).toEqual(true);
+     });
+     it('no add', function() {
+       expect(diff4.add().length).toEqual(0);
+     });
+     it('no update', function() {
+       expect(diff4.update().length).toEqual(0);
+     });
+     it('one delete', function() {
+       expect(diff4.delete().length).toEqual(1);
+     });
+   })
+ });
