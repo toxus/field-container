@@ -25,7 +25,7 @@ const fieldsClass = require('./lib/fieldContainer');
 const fields = new fieldsClass();
 
 let template = new rowTemplate();
-template.readFile('../spec/rowTemplate.json');
+template.readFile('./spec/rowTemplate.json');
 
 fields.clear();
 var cnt = fields.count();
