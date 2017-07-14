@@ -43,3 +43,5 @@ This package is licensed under MIT.
 
 [npm-image]: https://img.shields.io/npm/v/google-libphonenumber.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/google-libphonenumber
+[travis-image]: https://img.shields.io/travis/seegno/google-libphonenumber.svg?style=flat-square
+[travis-url]: https://travis-ci.org/seegno/google-libphonenumber
