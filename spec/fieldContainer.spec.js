@@ -4,53 +4,54 @@
 'use strict';
 
 const fieldContainerClass = require('../lib/fieldContainer');
-const rowTemplateClass = require('../lib/rowTemplate');
+const templatMatricClass = require('../lib/templateMatrix');
 
-describe("fieldContainer", function() {
+describe("fieldContainer 1", function() {
 
 
-  describe("field manipulations:", function() {
-    describe('adding and removing', function() {
-      const fields = new fieldContainerClass();
+  describe("Field manipulations:", function() {
+    describe('Adding and removing', function() {
+      const field1 = new fieldContainerClass();
       it("Has a count function", function() {
-        expect(typeof fields.count).toEqual('function');
+        expect(typeof field1.count).toEqual('function');
       });
-      fields.clear();
-      it('had no fields', function() {
-        expect(fields.count()).toEqual(0);
+      field1.clear();
+      it('had no field1', function() {
+        expect(field1.count()).toEqual(0);
       });
 
       it("Has a add function", function () {
-        expect(typeof fields.add).toEqual('function');
+        expect(typeof field1.add).toEqual('function');
       });
 
       let index;
       it("Add a field", function () {
-        index = fields.add('nr1', "telephone", {number: "0610810547", country: "31"}, ["telephone.mobile"]);
+        index = field1.add('nr1', "telephone", {value: "+31-0610810547"}, ["telephone.mobile"]);
+        expect(field1.errors()).toEqual([]);
         expect(index).toEqual(0)
       });
 
       it('to have one member', function() {
-        expect(fields.count()).toEqual(1);
+        expect(field1.count()).toEqual(1);
       });
 
       it("returns the field", function() {
-        expect(fields.get(index)).toEqual({ name: "nr1", usage: ["telephone.mobile"],fieldType: "telephone", data: {number: "0610810547", country: "31"}});
+        expect(field1.get(index)).toEqual({ name: "nr1", usage: ["telephone.mobile"],fieldType: "telephone", data: {value: "+31-6-10810547"}});
       });
       it("returns an error if the index is out of bounce", function() {
-        expect(function() { fields.get(-1)}).toThrow(new Error('index out of bounce'));
+        expect(function() { field1.get(-1)}).toThrow(new Error('index out of bounce'));
       });
       it("to remove an element", function() {
-        expect(fields.delete(index)).toEqual({ name: "nr1", usage: ["telephone.mobile"], fieldType: "telephone", data: {number: "0610810547", country: "31"}})
+        expect(field1.delete(index)).toEqual({ name: "nr1", usage: ["telephone.mobile"], fieldType: "telephone", data: {value: "+31-6-10810547"}})
       });
 
       it('to have one member', function() {
-        index = fields.add({ name: "nr2", fieldType: "telephone", data: {value: "0612345678"}, usage: ["telephone.mobile"]});
+        index = field1.add({ name: "nr2", fieldType: "telephone", data: {value: "0612345678"}, usage: ["telephone.mobile"]});
 
-        expect(fields.count()).toEqual(1);
+        expect(field1.count()).toEqual(1);
       });
       it("returns the field", function() {
-        expect(fields.get(index)).toEqual({ name: "nr2", usage: ["telephone.mobile"], fieldType: "telephone", data: {value: "0612345678"}});
+        expect(field1.get(index)).toEqual({ name: "nr2", usage: ["telephone.mobile"], fieldType: "telephone", data: {value: "+31-6-12345678"}});
       });
 
     });
@@ -80,17 +81,19 @@ describe("fieldContainer", function() {
   describe('import information', function() {
     const fieldRow = new fieldContainerClass();
 
-    let template = new rowTemplateClass();
+    let template = new templatMatricClass();
     template.readFile('../spec/rowTemplate.json');
 
     fieldRow.clear();
 
     expect(fieldRow.count()).toEqual(0);
-    fieldRow.importRow(
+    expect(fieldRow.errors()).toEqual([]);
+    //fieldRow.importRow(
+    template.import(
       {
         A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
       },
-      template
+      fieldRow
     );
 
     it('all is valid', function() {
@@ -101,7 +104,7 @@ describe("fieldContainer", function() {
 
       expect(fieldRow.get(1).fieldType).toEqual('name');
 
-      expect(fieldRow.hasErrors()).toEqual(false);
+      expect(fieldRow.errors()).toEqual([]);
     });
     it('to find by name', function() {
       expect(fieldRow.get('id').name).toEqual('id');
@@ -113,18 +116,19 @@ describe("fieldContainer", function() {
   describe('test delete', function() {
     const fieldRow = new fieldContainerClass();
 
-    let template = new rowTemplateClass();
+    let template = new templatMatricClass();
     template.readFile('../spec/rowTemplate.json');
 
     fieldRow.clear();
 
     expect(fieldRow.count()).toEqual(0);
-    fieldRow.importRow(
+    template.import(
       {
         A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
       },
-      template
+      fieldRow
     );
+
 
     fieldRow.delete(2);
     fieldRow.delete('name');
@@ -139,17 +143,17 @@ describe("fieldContainer", function() {
   describe('import information with errors', function() {
     const fieldRow = new fieldContainerClass();
 
-    let template = new rowTemplateClass();
+    let template = new templatMatricClass();
     template.readFile('../spec/rowTemplate.json');
 
     fieldRow.clear();
 
     expect(fieldRow.count()).toEqual(0);
-    fieldRow.importRow(
+    template.import(
       {
         A: '12345',B:'John',C:'the',UU:'Bastard',E:'Google',F:'john@checkit.com',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
       },
-      template
+      fieldRow
     );
     it('has an error', function() {
       expect(fieldRow.hasErrors()).toEqual(true);
@@ -161,16 +165,16 @@ describe("fieldContainer", function() {
 
   describe("standarizing the row", function() {
     const fieldRow = new fieldContainerClass();
-    let template = new rowTemplateClass();
+    let template = new templatMatricClass();
     template.readFile('../spec/rowTemplate.json');
     fieldRow.clear();
     expect(fieldRow.count()).toEqual(0);
 
-    fieldRow.importRow(
+    template.import(
       {
         A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
       },
-      template
+      fieldRow
     );
     it('to have no errors', function() {
       expect(fieldRow.hasErrors()).toEqual(false);
@@ -200,37 +204,37 @@ describe("fieldContainer", function() {
    const field3 = new fieldContainerClass();
    const field4 = new fieldContainerClass();
    const field5 = new fieldContainerClass();
-   let template = new rowTemplateClass();
+   let template = new templatMatricClass();
    template.readFile('../spec/rowTemplate.json');
-   field1.importRow(
+   template.import(
      {
        A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
      },
-     template
+     field1
    );
-   field2.importRow(
+   template.import(
      {
        A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
      },
-     template
+     field2
    );
-   field3.importRow(
+   template.import(
      {
-       A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'+31-0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
+       A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'+31-123456789',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
      },
-     template
+     field3
    );
-   field4.importRow(
-     {
-       A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
-     },
-     template
-   );
-   field5.importRow(
+   template.import(
      {
        A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
      },
-     template
+     field4
+   );
+   template.import(
+     {
+       A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
+     },
+     field5
    );
 
 
@@ -257,7 +261,7 @@ describe("fieldContainer", function() {
    });
    it('one update', function() {
      expect(diff2.update().length).toEqual(1);
-     expect(diff2.update()[0].field.data.value).toEqual('+31-0612345678');
+     expect(diff2.update()[0].field.data.value).toEqual('+31-123456789');
    });
    it('no delete', function() {
      expect(diff2.delete()).toEqual([]);
@@ -306,9 +310,9 @@ describe('fieldContainer patching', function() {
   const field3 = new fieldContainerClass();
   const field4 = new fieldContainerClass();
   const field5 = new fieldContainerClass();
-  let template = new rowTemplateClass();
+  let template = new templatMatricClass();
   template.readFile('../spec/rowTemplate.json');
-  field1.importRow(
+  template.import(
     {
       A: '12345',
       B: 'John',
@@ -324,9 +328,9 @@ describe('fieldContainer patching', function() {
       L: 'Amsterdam',
       M: 'nl'
     },
-    template
+    field1
   );
-  field2.importRow(
+  template.import(
     {
       A: '12345',
       B: 'John',
@@ -342,7 +346,7 @@ describe('fieldContainer patching', function() {
       L: 'Amsterdam',
       M: 'nl'
     },
-    template
+    field2
   );
   field2.add('telephone2', 'telephone', {value: '12345'});
   let diff2 = field1.diff(field2);
@@ -354,7 +358,7 @@ describe('fieldContainer patching', function() {
   it('to have new fields', function() {
     //expect(field3).toEqual(1);
     expect(field3.count()).toEqual(2);
-    expect(field3.get("telephone2").data.value).toEqual('12345')
+    expect(field3.get("telephone2").data.value).toEqual('+31-12345')
     expect(field3.get('email').data.value).toEqual('test@checkit.com')
   });
   it('has one update and one add', function() {
