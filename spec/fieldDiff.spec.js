@@ -35,3 +35,16 @@ describe('fieldDiff', function() {
     expect(diff.delete()).toEqual([{ field : { text : 'someInfo' } }]);
   })
 });
+
+describe('getting / setting', () => {
+  let diff = new fieldDiffClass();
+  diff.add({text: 'someInfo'});
+  diff.delete({text: 'someInfo'});
+  diff.update({text: 'someInfo'});
+  expect(diff.delete()).toEqual([{ field : { text : 'someInfo' } }]);
+
+  let struc = diff.obj();
+  let diffOther = new fieldDiffClass();
+  diffOther.obj(struc);
+  expect(diffOther.delete()).toEqual([{ field : { text : 'someInfo' } }]);
+});
