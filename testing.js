@@ -4,11 +4,24 @@
  * how it should work:
  */
 
+const templatMatrixClass = require('./lib/templateMatrix');
+const template = new templatMatrixClass();
+const RecordClass = require('./lib/fieldContainer');
+
+template.readFile('../spec/template.json');
+let rec = new RecordClass();
+const data =
+  {
+    A: '1234', B:'Jaap',C:'van der', D:'Kreeft',E:'Toxus',F:'info@example.com',G:'0612345678',H:'',I:'Eerste weg',J:'12',K:'1017TE',L:'Adam', M:'NL'
+  };
+template.import(data, rec);
+console.log('err:', rec.hasErrors());
+/*
 const fieldClass = require('./lib/fieldContainer');
 
 let field1 = new fieldClass();
 let index = field1.add('nr1', "telephone", {value: "+31-0610810547"}, ["telephone.mobile"]);
-
+*/
 /*
 
 
