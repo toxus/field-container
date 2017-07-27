@@ -36,22 +36,22 @@ describe("fieldContainer 1", function() {
       });
 
       it("returns the field", function() {
-        expect(field1.get(index)).toEqual({ name: "nr1", usage: ["telephone.mobile"],fieldType: "telephone", data: {value: "+31-6-10810547"}});
+        expect(field1.get(index)).toEqual({ id: "nr1", usage: ["telephone.mobile"],fieldType: "telephone", data: {value: "+31-6-10810547"}});
       });
       it("returns an error if the index is out of bounce", function() {
         expect(function() { field1.get(-1)}).toThrow(new Error('index out of bounce'));
       });
       it("to remove an element", function() {
-        expect(field1.delete(index)).toEqual({ name: "nr1", usage: ["telephone.mobile"], fieldType: "telephone", data: {value: "+31-6-10810547"}})
+        expect(field1.delete(index)).toEqual({ id: "nr1", usage: ["telephone.mobile"], fieldType: "telephone", data: {value: "+31-6-10810547"}})
       });
 
       it('to have one member', function() {
-        index = field1.add({ name: "nr2", fieldType: "telephone", data: {value: "0612345678"}, usage: ["telephone.mobile"]});
+        index = field1.add({ id: "nr2", fieldType: "telephone", data: {value: "0612345678"}, usage: ["telephone.mobile"]});
 
         expect(field1.count()).toEqual(1);
       });
       it("returns the field", function() {
-        expect(field1.get(index)).toEqual({ name: "nr2", usage: ["telephone.mobile"], fieldType: "telephone", data: {value: "+31-6-12345678"}});
+        expect(field1.get(index)).toEqual({ id: "nr2", usage: ["telephone.mobile"], fieldType: "telephone", data: {value: "+31-6-12345678"}});
       });
 
     });
@@ -99,7 +99,7 @@ describe("fieldContainer 1", function() {
     it('all is valid', function() {
       expect(fieldRow.count()).toEqual(4);  // four fields
       expect(fieldRow.get(0).data.value).toEqual('12345');
-      expect(fieldRow.get(0).name).toEqual('id');
+      expect(fieldRow.get(0).id).toEqual('id');
       expect(fieldRow.get(0).fieldType).toEqual('id');
 
       expect(fieldRow.get(1).fieldType).toEqual('name');
@@ -107,8 +107,8 @@ describe("fieldContainer 1", function() {
       expect(fieldRow.errors()).toEqual([]);
     });
     it('to find by name', function() {
-      expect(fieldRow.get('id').name).toEqual('id');
-      expect(fieldRow.get('telephone').name).toEqual('telephone');
+      expect(fieldRow.get('id').id).toEqual('id');
+      expect(fieldRow.get('telephone').id).toEqual('telephone');
       expect(fieldRow.get('not a field')).toEqual(false);
     });
   });
@@ -134,8 +134,8 @@ describe("fieldContainer 1", function() {
     fieldRow.delete('name');
     it('to remove a field by index', function() {
       expect(fieldRow.count()).toEqual(2);
-      expect(fieldRow.get('id').name).toEqual('id');
-      expect(fieldRow.get('email').name).toEqual('email');
+      expect(fieldRow.get('id').id).toEqual('id');
+      expect(fieldRow.get('email').id).toEqual('email');
       expect(fieldRow.get('telephone')).toEqual(false);
     });
   });
@@ -275,7 +275,7 @@ describe("fieldContainer 1", function() {
    });
    it('one add', function() {
      expect(diff3.add().length).toEqual(1);
-     expect(diff3.add()[0].field.name).toEqual('telephone2');
+     expect(diff3.add()[0].field.id).toEqual('telephone2');
      expect(diff3.add()[0].field.data).toEqual({ value: '+31-5555555'});
    });
    it('no update', function() {

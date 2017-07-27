@@ -7,7 +7,23 @@
 const templatMatrixClass = require('./lib/templateMatrix');
 const template = new templatMatrixClass();
 const RecordClass = require('./lib/fieldContainer');
+const FieldDiffClass = require('./lib/fieldDiff');
 
+
+const origin = '123123';
+let diff2 = new FieldDiffClass();
+let fields2 = new RecordClass();
+diff2.add( {id:'someField', text: 'someInfo'});
+diff2.add( {id:'otherField', text: 'Nr 14'})
+;
+diff2.exec(fields2.fields(), origin);
+
+let diff3 = new FieldDiffClass();
+diff3.delete({id:'otherField'});
+diff3.exec(fields2.fields(), origin);
+console.log(fields2.fields());
+
+/*
 template.readFile('../spec/template.json');
 let rec = new RecordClass();
 const data =
@@ -15,7 +31,8 @@ const data =
     A: '1234', B:'Jaap',C:'van der', D:'Kreeft',E:'Toxus',F:'info@example.com',G:'0612345678',H:'',I:'Eerste weg',J:'12',K:'1017TE',L:'Adam', M:'NL'
   };
 template.import(data, rec);
-console.log('err:', rec.hasErrors());
+console.log(rec.get('telephone'));
+*/
 /*
 const fieldClass = require('./lib/fieldContainer');
 
