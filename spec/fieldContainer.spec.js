@@ -180,7 +180,7 @@ describe("fieldContainer 1", function() {
       expect(fieldRow.hasErrors()).toEqual(false);
     });
     it('to have a record id', function () {
-      expect(fieldRow.id()).toEqual("12345");
+      expect(fieldRow.id).toEqual("12345");
     });
     fieldRow.stardardize();
     it("to have no errors", function() {
@@ -367,5 +367,9 @@ describe('fieldContainer patching', function() {
     expect(undo.delete().length).toEqual(1);
     expect(undo.add().length).toEqual(0);
   });
+
+  it('to have an id', () => {
+    expect(field1.id).toEqual('12345');
+  })
 });
 
