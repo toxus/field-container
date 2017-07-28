@@ -438,3 +438,53 @@ describe('fieldContainer patching', function() {
   })
 });
 
+describe('fieldContainer.update clear', () => {
+  let template = new templatMatricClass();
+  template.readFile('../spec/rowTemplate.json');
+  let field1 = new fieldContainerClass();
+  template.import(
+    {
+      F:'john@checkit.com',A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
+    },
+    field1
+  );
+  let fieldNew = new fieldContainerClass();
+  fieldNew.fields(_.cloneDeep(field1.data));
+  fieldNew.get('email').data.value = '';
+
+  let diff = field1.diff(fieldNew);
+
+  it('no update', () => {
+    expect(diff.update().length).toEqual(0);
+  });
+  it('a delete', () => {
+    expect(diff.delete().length).toEqual(1);
+  })
+});
+
+describe('fieldContaier.missing fields', () => {
+  let template = new templatMatricClass();
+  template.readFile('../spec/rowTemplate.json');
+  let field1 = new fieldContainerClass();
+  template.import(
+    {
+      F:'john@checkit.com',A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
+    },
+    field1
+  );
+  let fieldNew = new fieldContainerClass();
+  fieldNew.fields(_.cloneDeep(field1.data));
+  fieldNew.delete(2);
+
+  let diff = field1.diff(fieldNew, {notFoundIsDelete : false});
+
+  it('no update', () => {
+    expect(diff.update().length).toEqual(0);
+  });
+  it('a delete', () => {
+    expect(diff.delete().length).toEqual(0);
+  })
+
+});
+
+
