@@ -86,7 +86,7 @@ describe('patch.exec', () => {
 //    console.log(fields2.fields());
     expect(fields2.fields().length).toEqual(2);
     expect(fields2.fields()[1].text).toEqual('new value')
-  })
+  });
 
   it('add a field', () => {
     let diff2 = new FieldDiffClass();

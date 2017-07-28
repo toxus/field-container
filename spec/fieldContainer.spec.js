@@ -2,9 +2,13 @@
  * Created by jaap on 10/07/2017.
  */
 'use strict';
+// debug test routines
+//global.expect = require("jasmine").expect;
+
 
 const fieldContainerClass = require('../lib/fieldContainer');
 const templatMatricClass = require('../lib/templateMatrix');
+const _ = require('lodash');
 
 describe("fieldContainer 1", function() {
 
@@ -93,16 +97,17 @@ describe("fieldContainer 1", function() {
     template.readFile('../spec/rowTemplate.json');
 
     fieldRow.clear();
-
-    expect(fieldRow.count()).toEqual(0);
-    expect(fieldRow.errors()).toEqual([]);
-    //fieldRow.importRow(
-    template.import(
-      {
-        A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
-      },
-      fieldRow
-    );
+    it('to import', () => {
+      expect(fieldRow.count()).toEqual(0);
+      expect(fieldRow.errors()).toEqual([]);
+      //fieldRow.importRow(
+      template.import(
+        {
+          A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
+        },
+        fieldRow
+      );
+    });
 
     it('all is valid', function() {
       expect(fieldRow.count()).toEqual(4);  // four fields
@@ -129,7 +134,6 @@ describe("fieldContainer 1", function() {
 
     fieldRow.clear();
 
-    expect(fieldRow.count()).toEqual(0);
     template.import(
       {
         A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',F:'john@checkit.com',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
@@ -138,14 +142,15 @@ describe("fieldContainer 1", function() {
     );
 
 
+
     fieldRow.delete(2);
     fieldRow.delete('name');
-    it('to remove a field by index', function() {
+    it('to remove a field by index', () => {
       expect(fieldRow.count()).toEqual(2);
       expect(fieldRow.get('id').id).toEqual('id');
       expect(fieldRow.get('email').id).toEqual('email');
       expect(fieldRow.get('telephone')).toEqual(false);
-    });
+    })
   });
 
   describe('import information with errors', function() {
@@ -156,7 +161,7 @@ describe("fieldContainer 1", function() {
 
     fieldRow.clear();
 
-    expect(fieldRow.count()).toEqual(0);
+//    expect(fieldRow.count()).toEqual(0);
     template.import(
       {
         A: '12345',B:'John',C:'the',UU:'Bastard',E:'Google',F:'john@checkit.com',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
@@ -176,7 +181,7 @@ describe("fieldContainer 1", function() {
     let template = new templatMatricClass();
     template.readFile('../spec/rowTemplate.json');
     fieldRow.clear();
-    expect(fieldRow.count()).toEqual(0);
+//    expect(fieldRow.count()).toEqual(0);
 
     template.import(
       {
@@ -309,7 +314,51 @@ describe("fieldContainer 1", function() {
      it('one delete', function() {
        expect(diff4.delete().length).toEqual(1);
      });
-   })
+   });
+
+
+   describe('usage', () =>{
+      let usField = new fieldContainerClass();
+      for (let l = 0; l < field1.data.length; l++) {
+        delete field1.data[l].usage;
+      }
+      // field1 and usField are now the same but not linked with no usage
+      it('no change if both undefined', () => {
+        usField.fields(_.clone( field1.data));
+        expect(field1.diff(usField).hasAction()).toEqual(false);
+      });
+     it('update on set', () => {
+       usField.fields(_.cloneDeep( field1.data));
+       usField.data[0].usage = ['test'];
+       const d = field1.diff(usField);
+       expect(d.hasAction()).toEqual(true);
+       expect(d.update().length).toEqual(1);
+     });
+     it('update on clear', () => {
+       usField.fields(_.cloneDeep( field1.data));
+       field1.data[0].usage = ['test'];
+       const d = field1.diff(usField);
+       expect(d.hasAction()).toEqual(true);
+       expect(d.update().length).toEqual(1);
+     });
+     it('update on change', () => {
+       usField.fields(_.cloneDeep( field1.data));
+       field1.data[0].usage = ['test'];
+       usField.data[0].usage = ['some others'];
+       const d = field1.diff(usField);
+       expect(d.hasAction()).toEqual(true);
+       expect(d.update().length).toEqual(1);
+     });
+     it('update on add element', () => {
+       usField.fields(_.cloneDeep( field1.data));
+       field1.data[0].usage = ['test'];
+       usField.data[0].usage = ['test', 'some others'];
+       const d = field1.diff(usField);
+       expect(d.hasAction()).toEqual(true);
+       expect(d.update().length).toEqual(1);
+     })
+
+   });
  });
 
 describe('fieldContainer patching', function() {

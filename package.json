@@ -1,6 +1,6 @@
 {
   "name": "@toxus/field-container",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "The container that holds the fields information",
   "main": "index.js",
   "scripts": {
@@ -12,6 +12,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "chai": "^4.1.0",
     "jasmine": "^2.6.0",
     "jasmine-node": "^1.14.5"
   },
