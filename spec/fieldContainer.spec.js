@@ -8,7 +8,6 @@ const templatMatricClass = require('../lib/templateMatrix');
 
 describe("fieldContainer 1", function() {
 
-
   describe("Field manipulations:", function() {
     describe('Adding and removing', function() {
       const field1 = new fieldContainerClass();
@@ -74,7 +73,16 @@ describe("fieldContainer 1", function() {
       it('clears the errors', function() {
         fields.clearErrors();
         expect(fields.hasErrors()).toEqual(false);
-      })
+      });
+
+      it('assign other fields', () => {
+        fields.fields([
+          { id: 'test', data: { x: 'xx'}},
+          { id: 'test2', data: { x: 'yy'}},
+        ]);
+        expect(fields.fields().length).toEqual(2);
+        expect(fields.get('test').id).toEqual('test');
+      });
     })
   });
 
