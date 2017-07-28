@@ -356,7 +356,15 @@ describe("fieldContainer 1", function() {
        const d = field1.diff(usField);
        expect(d.hasAction()).toEqual(true);
        expect(d.update().length).toEqual(1);
+     });
+     it('update missing', () => {
+       usField.fields(_.cloneDeep( field1.data));
+       field1.data[0].usage = [];
+       delete usField.data[0].usage;
+       const d = field1.diff(usField);
+       expect(d.hasAction()).toEqual(false);
      })
+
 
    });
  });
