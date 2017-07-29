@@ -3,7 +3,7 @@
  */
 "use strict";
 const templatMatrixClass = require('../lib/templateMatrix');
-const RecordClass = require('../lib/fieldContainer');
+const RecordClass = require('../lib/flexRecord');
 
 describe('templateMatrix', () => {
   describe('read file', function() {

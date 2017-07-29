@@ -3,11 +3,11 @@
  */
 "use strict";
 const fieldNamespace = require('../lib/fieldTypes');
-const fieldContainer = require('../lib/fieldContainer');
+const FlexRecordClass = require('../lib/flexRecord');
 
 describe('Test field standardization of', function() {
 
-  var container = new fieldContainer();
+  var container = new FlexRecordClass();
 
   describe('text', function() {
 

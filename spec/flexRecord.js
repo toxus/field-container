@@ -6,15 +6,15 @@
 //global.expect = require("jasmine").expect;
 
 
-const fieldContainerClass = require('../lib/fieldContainer');
+const FlexRecordClass = require('../lib/flexRecord');
 const templatMatricClass = require('../lib/templateMatrix');
 const _ = require('lodash');
 
-describe("fieldContainer 1", function() {
+describe("flexRecord 1", function() {
 
   describe("Field manipulations:", function() {
     describe('Adding and removing', function() {
-      const field1 = new fieldContainerClass();
+      const field1 = new FlexRecordClass();
       it("Has a count function", function() {
         expect(typeof field1.count).toEqual('function');
       });
@@ -39,28 +39,28 @@ describe("fieldContainer 1", function() {
       });
 
       it("returns the field", function() {
-        expect(field1.get(index)).toEqual({ id: "nr1", usage: ["telephone.mobile"],fieldType: "telephone", data: {value: "+31-6-10810547"}});
+        expect(field1.get(index)).toEqual({ refId: "nr1", usage: ["telephone.mobile"],fieldType: "telephone", data: {value: "+31-6-10810547"}});
       });
       it("returns an error if the index is out of bounce", function() {
         expect(function() { field1.get(-1)}).toThrow(new Error('index out of bounce'));
       });
       it("to remove an element", function() {
-        expect(field1.delete(index)).toEqual({ id: "nr1", usage: ["telephone.mobile"], fieldType: "telephone", data: {value: "+31-6-10810547"}})
+        expect(field1.delete(index)).toEqual({ refId: "nr1", usage: ["telephone.mobile"], fieldType: "telephone", data: {value: "+31-6-10810547"}})
       });
 
       it('to have one member', function() {
-        index = field1.add({ id: "nr2", fieldType: "telephone", data: {value: "0612345678"}, usage: ["telephone.mobile"]});
+        index = field1.add({ refId: "nr2", fieldType: "telephone", data: {value: "0612345678"}, usage: ["telephone.mobile"]});
 
         expect(field1.count()).toEqual(1);
       });
       it("returns the field", function() {
-        expect(field1.get(index)).toEqual({ id: "nr2", usage: ["telephone.mobile"], fieldType: "telephone", data: {value: "+31-6-12345678"}});
+        expect(field1.get(index)).toEqual({ refId: "nr2", usage: ["telephone.mobile"], fieldType: "telephone", data: {value: "+31-6-12345678"}});
       });
 
     });
 
     describe('group action', function() {
-      const fields = new fieldContainerClass();
+      const fields = new FlexRecordClass();
 
       it("to remove all", function() {
         fields.clear();
@@ -81,17 +81,17 @@ describe("fieldContainer 1", function() {
 
       it('assign other fields', () => {
         fields.fields([
-          { id: 'test', data: { x: 'xx'}},
-          { id: 'test2', data: { x: 'yy'}},
+          { refId: 'test', data: { x: 'xx'}},
+          { refId: 'test2', data: { x: 'yy'}},
         ]);
         expect(fields.fields().length).toEqual(2);
-        expect(fields.get('test').id).toEqual('test');
+        expect(fields.get('test').refId).toEqual('test');
       });
     })
   });
 
   describe('import information', function() {
-    const fieldRow = new fieldContainerClass();
+    const fieldRow = new FlexRecordClass();
 
     let template = new templatMatricClass();
     template.readFile('../spec/rowTemplate.json');
@@ -112,7 +112,7 @@ describe("fieldContainer 1", function() {
     it('all is valid', function() {
       expect(fieldRow.count()).toEqual(4);  // four fields
       expect(fieldRow.get(0).data.value).toEqual('12345');
-      expect(fieldRow.get(0).id).toEqual('id');
+      expect(fieldRow.get(0).refId).toEqual('id');
       expect(fieldRow.get(0).fieldType).toEqual('id');
 
       expect(fieldRow.get(1).fieldType).toEqual('name');
@@ -120,14 +120,15 @@ describe("fieldContainer 1", function() {
       expect(fieldRow.errors()).toEqual([]);
     });
     it('to find by name', function() {
-      expect(fieldRow.get('id').id).toEqual('id');
-      expect(fieldRow.get('telephone').id).toEqual('telephone');
+      console.log('RES', fieldRow.get('id'));
+      expect(fieldRow.get('id').refId).toEqual('id');
+      expect(fieldRow.get('telephone').refId).toEqual('telephone');
       expect(fieldRow.get('not a field')).toEqual(false);
     });
   });
 
   describe('test delete', function() {
-    const fieldRow = new fieldContainerClass();
+    const fieldRow = new FlexRecordClass();
 
     let template = new templatMatricClass();
     template.readFile('../spec/rowTemplate.json');
@@ -147,14 +148,14 @@ describe("fieldContainer 1", function() {
     fieldRow.delete('name');
     it('to remove a field by index', () => {
       expect(fieldRow.count()).toEqual(2);
-      expect(fieldRow.get('id').id).toEqual('id');
-      expect(fieldRow.get('email').id).toEqual('email');
+      expect(fieldRow.get('id').refId).toEqual('id');
+      expect(fieldRow.get('email').refId).toEqual('email');
       expect(fieldRow.get('telephone')).toEqual(false);
     })
   });
 
   describe('import information with errors', function() {
-    const fieldRow = new fieldContainerClass();
+    const fieldRow = new FlexRecordClass();
 
     let template = new templatMatricClass();
     template.readFile('../spec/rowTemplate.json');
@@ -177,7 +178,7 @@ describe("fieldContainer 1", function() {
   });
 
   describe("standarizing the row", function() {
-    const fieldRow = new fieldContainerClass();
+    const fieldRow = new FlexRecordClass();
     let template = new templatMatricClass();
     template.readFile('../spec/rowTemplate.json');
     fieldRow.clear();
@@ -211,12 +212,12 @@ describe("fieldContainer 1", function() {
 
 });
 
- describe('fieldContainer changes', function() {
-   const field1 = new fieldContainerClass();
-   const field2 = new fieldContainerClass();
-   const field3 = new fieldContainerClass();
-   const field4 = new fieldContainerClass();
-   const field5 = new fieldContainerClass();
+ describe('flexRecord changes', function() {
+   const field1 = new FlexRecordClass();
+   const field2 = new FlexRecordClass();
+   const field3 = new FlexRecordClass();
+   const field4 = new FlexRecordClass();
+   const field5 = new FlexRecordClass();
    let template = new templatMatricClass();
    template.readFile('../spec/rowTemplate.json');
    template.import(
@@ -288,7 +289,7 @@ describe("fieldContainer 1", function() {
    });
    it('one add', function() {
      expect(diff3.add().length).toEqual(1);
-     expect(diff3.add()[0].field.id).toEqual('telephone2');
+     expect(diff3.add()[0].field.refId).toEqual('telephone2');
      expect(diff3.add()[0].field.data).toEqual({ value: '+31-5555555'});
    });
    it('no update', function() {
@@ -318,7 +319,7 @@ describe("fieldContainer 1", function() {
 
 
    describe('usage', () =>{
-      let usField = new fieldContainerClass();
+      let usField = new FlexRecordClass();
       for (let l = 0; l < field1.data.length; l++) {
         delete field1.data[l].usage;
       }
@@ -369,12 +370,12 @@ describe("fieldContainer 1", function() {
    });
  });
 
-describe('fieldContainer patching', function() {
-  const field1 = new fieldContainerClass();
-  const field2 = new fieldContainerClass();
-  const field3 = new fieldContainerClass();
-  const field4 = new fieldContainerClass();
-  const field5 = new fieldContainerClass();
+describe('flexRecord patching', function() {
+  const field1 = new FlexRecordClass();
+  const field2 = new FlexRecordClass();
+  const field3 = new FlexRecordClass();
+  const field4 = new FlexRecordClass();
+  const field5 = new FlexRecordClass();
   let template = new templatMatricClass();
   template.readFile('../spec/rowTemplate.json');
   template.import(
@@ -438,17 +439,17 @@ describe('fieldContainer patching', function() {
   })
 });
 
-describe('fieldContainer.update clear', () => {
+describe('flexRecord.update clear', () => {
   let template = new templatMatricClass();
   template.readFile('../spec/rowTemplate.json');
-  let field1 = new fieldContainerClass();
+  let field1 = new FlexRecordClass();
   template.import(
     {
       F:'john@checkit.com',A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
     },
     field1
   );
-  let fieldNew = new fieldContainerClass();
+  let fieldNew = new FlexRecordClass();
   fieldNew.fields(_.cloneDeep(field1.data));
   fieldNew.get('email').data.value = '';
 
@@ -462,17 +463,17 @@ describe('fieldContainer.update clear', () => {
   })
 });
 
-describe('fieldContaier.missing fields', () => {
+describe('flexRecord.missing fields', () => {
   let template = new templatMatricClass();
   template.readFile('../spec/rowTemplate.json');
-  let field1 = new fieldContainerClass();
+  let field1 = new FlexRecordClass();
   template.import(
     {
       F:'john@checkit.com',A: '12345',B:'John',C:'the',D:'Bastard',E:'Google',G:'0612345678',H:'',I:'Nowhere',J:'1234', K:'1017TE',L:'Amsterdam',M:'nl'
     },
     field1
   );
-  let fieldNew = new fieldContainerClass();
+  let fieldNew = new FlexRecordClass();
   fieldNew.fields(_.cloneDeep(field1.data));
   fieldNew.delete(2);
 

@@ -4,7 +4,7 @@
  */
 "use strict";
 const FieldDiffClass = require('../lib/fieldDiff');
-const RecordClass = require('../lib/fieldContainer');
+const RecordClass = require('../lib/flexRecord');
 
 describe('fieldDiff', function() {
   let diff = new FieldDiffClass();
