@@ -104,7 +104,7 @@ describe('patch.exec', () => {
   });
 
 /**  DOES NOT RUN ON TRAVIS
- * 
+ *
   it('delete a mongoose element', (done) => {
     const origin = '123123';
     const mongoose = require('mongoose');
