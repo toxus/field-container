@@ -3,12 +3,19 @@
  */
 "use strict";
 
-var fieldCleaner = require('../lib/fieldCleaner');
+const FieldCleanerClass = require('../lib/fieldCleaner');
+const TypesClass = require('../lib/fieldTypes');
 
-describe('check the field cleaner', function() {
-  var cleaner = new fieldCleaner();
+describe('fieldCleaner', function() {
+  let cleaner = new FieldCleanerClass();
 
-  it('does have a cleaner', function() {
-    //expect(cleaner).toExist();
+  it('hasData', () => {
+    let txt = new TypesClass.text();
+    expect(txt.hasData({data: {value : 'test'} })).toEqual(true);
+    expect(txt.hasData({data: {value : ''} })).toEqual(false);
+    expect(txt.hasData({data: {} })).toEqual(false);
   })
+
+
+
 });
