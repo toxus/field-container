@@ -57,31 +57,31 @@ describe('patch.exec', () => {
   it('add a field', () => {
     let diff = new FieldDiffClass();
     let fields = new RecordClass();
-    diff.add( {id:'someField', text: 'someInfo'});
+    diff.add( {refId:'someField', text: 'someInfo'});
     diff.exec(fields.fields(), origin);
     expect(fields.fields().length).toEqual(1);
-    expect(fields.fields()[0].id).toEqual('someField')
+    expect(fields.fields()[0].refId).toEqual('someField')
   });
 
   it('add a field', () => {
     let diff2 = new FieldDiffClass();
     let fields2 = new RecordClass();
-    diff2.add( {id:'someField', text: 'someInfo'});
-    diff2.add( {id:'otherField', text: 'Nr 14'});
+    diff2.add( {refId:'someField', text: 'someInfo'});
+    diff2.add( {refId:'otherField', text: 'Nr 14'});
     diff2.exec(fields2.fields(), origin);
 //    console.log(fields2.fields());
     expect(fields2.fields().length).toEqual(2);
-    expect(fields2.fields()[1].id).toEqual('otherField')
+    expect(fields2.fields()[1].refId).toEqual('otherField')
   });
 
   it('update a field', () => {
     let diff2 = new FieldDiffClass();
     let fields2 = new RecordClass();
-    diff2.add( {id:'someField', text: 'someInfo'});
-    diff2.add( {id:'otherField', text: 'Nr 14'});
+    diff2.add( {refId:'someField', text: 'someInfo'});
+    diff2.add( {refId:'otherField', text: 'Nr 14'});
     diff2.exec(fields2.fields(), origin);
     let diff3 = new FieldDiffClass();
-    diff3.update({id:'otherField', text: 'new value'});
+    diff3.update({refId:'otherField', text: 'new value'});
     diff3.exec(fields2.fields(), origin);
 //    console.log(fields2.fields());
     expect(fields2.fields().length).toEqual(2);
@@ -91,17 +91,60 @@ describe('patch.exec', () => {
   it('add a field', () => {
     let diff2 = new FieldDiffClass();
     let fieldsDel = new RecordClass();
-    diff2.add( {id:'someField', text: 'someInfo'});
-    diff2.add( {id:'otherField', text: 'Nr 14'});
+    diff2.add( {refId:'someField', text: 'someInfo'});
+    diff2.add( {refId:'otherField', text: 'Nr 14'});
     diff2.exec(fieldsDel.fields(), origin);
     let diff3 = new FieldDiffClass();
-    diff3.delete({id:'otherField'});
+    diff3.delete({refId:'otherField'});
     diff3.exec(fieldsDel.fields(), origin);
 
-   // console.log(fieldsDel.fields());
+    // console.log('IN:', fieldsDel.fields());
     expect(fieldsDel.fields().length).toEqual(1);
-    // expect(fieldsDel.fields()[1].id).toEqual('otherField')
+    // expect(fieldsDel.fields()[1].refId).toEqual('otherField')
   });
 
+
+  it('delete a mongoose element', (done) => {
+    const origin = '123123';
+    const mongoose = require('mongoose');
+    mongoose.Promise = require('bluebird'); // global.Promise;
+    mongoose.connect( 'mongodb://localhost:27017/FieldTest', {useMongoClient: true} ,(err) => {
+
+      const Schema = mongoose.Schema;
+      const testModel = {
+        name: {type: Schema.Types.String},
+        fields: [
+          {
+            refId: {type: Schema.Types.String},
+            fieldType: {type: Schema.Types.String},
+            data: {
+              value: {type: Schema.Types.String}
+            }
+          }
+        ]
+      };
+      let TestClass = mongoose.model('test', testModel);
+
+      let rec1 = new TestClass();
+      rec1.name = 'Jack';
+      const cEmail = {refId: '1', fieldType: 'email', data: {value: 'j@x.com'}};
+      rec1.fields.push(cEmail);
+      rec1.fields.push({refId: '4', fieldType: 'fax', data: {value: '12123123'}})
+      rec1.save().then((rec) => {
+        // console.log('RES:', rec);
+
+        expect(rec.fields.length).toEqual(2);
+        let diff = new FieldDiffClass();
+        diff.delete(cEmail );
+        diff.exec(rec1.fields, origin);
+        rec1.save().then( (patched) => {
+          //console.log('Patched:', patched);
+          expect(rec.fields.length).toEqual(1);
+          mongoose.connection.close();
+          done();
+        })
+      })
+    });
+  })
 
 });
