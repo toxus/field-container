@@ -5,6 +5,7 @@
 "use strict";
 const FieldDiffClass = require('../lib/fieldDiff');
 const RecordClass = require('../lib/flexRecord');
+require('expectations');
 
 describe('fieldDiff', function() {
   let diff = new FieldDiffClass();
@@ -104,7 +105,7 @@ describe('patch.exec', () => {
   });
 
 /**  DOES NOT RUN ON TRAVIS
- *
+
   it('delete a mongoose element', (done) => {
     const origin = '123123';
     const mongoose = require('mongoose');
@@ -147,5 +148,61 @@ describe('patch.exec', () => {
       })
     });
   })
-*/
+ */
+});
+
+describe('fieldDiff.combine', () => {
+  let diff2 = new FieldDiffClass();
+  diff2.add( {refId:'someField', text: 'someInfo'});
+  diff2.add( {refId:'otherField', text: 'Nr 14'});
+
+  diff2.update( {refId:'updField', text: 'Nr 14'});
+  diff2.delete( {refId:'delField', text: 'Nr 14'});
+  it('to combine a extra add', (done) => {
+    let diff = new FieldDiffClass();
+    diff.add( {refId:'someField', text: 'Should not be added'});
+    diff.combine(diff2);
+    expect(diff.actions.add.length).toEqual(2);
+    expect(diff.actions.delete.length).toEqual(1);
+    expect(diff.actions.update.length).toEqual(1);
+
+    done();
+  });
+});
+
+describe('fieldDef.filter', () => {
+  let diff2 = new FieldDiffClass();
+  diff2.add( {refId:'email', 'fieldType' : 'email', text: 'someInfo'});
+  diff2.add( {refId:'telephone.12341', fieldType: 'telephone', usage: ['telephone.public', 'telephone.work'], text: 'Nr 14'});
+
+  diff2.update( {refId:'name', text: 'Nr 14'});
+  diff2.delete( {refId:'address', text: 'Nr 14'});
+
+  it('by refId', (done) => {
+    const filter = { refId : 'name'};
+    const res = diff2.filterOn(filter);
+    expect(res.hasAction()).toEqual(true);
+    expect(res.actions.add.length).toEqual(0);
+    expect(res.actions.update.length).toEqual(1);
+    done();
+  });
+
+  it('by usage', (done) => {
+    const filter = { usage : 'telephone.public'};
+    const res = diff2.filterOn(filter);
+    expect(res.hasAction()).toEqual(true);
+    expect(res.actions.add.length).toEqual(1);
+    expect(res.actions.update.length).toEqual(0);
+    done();
+  });
+
+  it('by fieldType', (done) => {
+    const filter = { fieldType : 'email'};
+    const res = diff2.filterOn(filter);
+    expect(res.hasAction()).toEqual(true);
+    expect(res.actions.add.length).toEqual(1);
+    expect(res.actions.update.length).toEqual(0);
+    done();
+  });
+
 });
