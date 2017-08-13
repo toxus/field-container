@@ -1,6 +1,6 @@
 {
   "name": "@toxus/field-container",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "description": "Record container that holds the fields information",
   "main": "index.js",
   "scripts": {
