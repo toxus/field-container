@@ -19,14 +19,14 @@
   "columns" : [
     {
       "fieldName" : "id",
-      "type" : "id",
+      "fieldType" : "id",
       "data": {
         "value" : "A"
       }
     },
     {
       "fieldName": "name",
-      "type": "name",
+      "fieldType": "name",
       "required" : 1,
       "data": {
         "firstName": "B",
@@ -37,21 +37,22 @@
     },
     {
       "fieldName" : "telephone",
-      "type" : "telephone",
+      "fieldType" : "telephone",
+      "select" : "#this",
       "data" : {
         "value" : "G"
       }
     },
     {
       "fieldName" : "email",
-      "type" : "email",
+      "fieldType" : "email",
       "data" : {
         "value" : "F"
       }
     },
     {
       "fieldName" : "address",
-      "type" : "address",
+      "fieldType" : "address",
       "data" : {
         "street" : "I",
         "number" : "J",

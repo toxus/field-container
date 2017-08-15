@@ -489,13 +489,14 @@ describe('flexRecord.missing fields', () => {
 
 });
 
+// TODO should test a lot more on the selection in the usage
 describe('flexRecord.filterByShare', () => {
   let fr = new FlexRecordClass();
   fr.fields(require('../spec/mocks/flexRecord'));
   const shareId = fr.items[0].ref[0].shareRowId;
   it('mark refId', () =>{
     const filtered = fr.markByShare(shareId);
-    expect(filtered).toEqual(5);
+    expect(filtered).toEqual(6);
   })
 
 });

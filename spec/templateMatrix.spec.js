@@ -11,13 +11,13 @@ describe('templateMatrix', () => {
     const tmp1 = new templatMatrixClass();
     tmp1.readFile('../spec/rowTemplate.json');
 
-    describe("have sheet", function() {
+    it("have sheet", function() {
       expect(tmp1.template().sheet).toEqual('Blad1');
     });
 
-    describe('the start row is used in counting', function() {
+    it('the start row is used in counting', function() {
       expect(tmp1.columnCount()).toEqual(4);
-      expect(tmp1.column(0).type).toEqual('id');
+      expect(tmp1.column(0).fieldType).toEqual('id');
     })
 
   });
@@ -45,7 +45,7 @@ describe('templateMatrix', () => {
       },
       "columns": [
         {
-          "type": "id",
+          "fieldType": "id",
           "fieldName": "id",
           "data": {
             "value": "A"
@@ -53,7 +53,7 @@ describe('templateMatrix', () => {
         },
         {
           "fieldName": "name",
-          "type": "name",
+          "fieldType": "name",
           "required": 1,
           "data": {
             "firstName": "B",
@@ -65,9 +65,9 @@ describe('templateMatrix', () => {
       ]
     }`;
     tmp.jsonString(json);
-    describe('have two columns', function() {
+    it('have two columns', function() {
       expect(tmp.columnCount()).toEqual(2);
-      expect(tmp.column(0).type).toEqual('id');
+      expect(tmp.column(0).fieldType).toEqual('id');
     })
   });
 
@@ -104,17 +104,21 @@ describe('templateMatrix', () => {
 
     });
   });
-/*
+
   describe('export', () => {
     const template = new templatMatrixClass();
     template.readFile('../spec/template.json');
     let rec = new RecordClass();
-    const data = require('../spec/flexRecord');
-    const result = template.export(data);
+    rec.fields(require('../spec/mocks/flexRecord'));
+
+    const shareId = rec.items[0].ref[0].shareRowId;
+
+    rec.markByShare(shareId);
+    const result = template.export(rec);
     it('to have an id', () => {
       console.log(result);
-      expect(result.A).toEqual('123');
+      expect(result.A).toEqual('1234');
     })
   })
-  */
+
 });

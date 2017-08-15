@@ -52,6 +52,22 @@ const fields = [
     "usage" : []
   },
   {
+    "_id" :"598459f2fe5947ead9ea4436",
+    "data" : {
+      "value" : "+31-6-99999999"
+    },
+    "fieldType" : "telephone",
+    "ref" : [
+      {
+        "shareRowId":"598459f2fe5947ead9ea813a",
+        "refId": "telephone",
+      },
+    ],
+
+    "isHidden" : false,
+    "usage" : ['#this']
+  },
+  {
     "_id" :"598459f2fe5947ead9ea999",
     "data" : {
       "value" : "+31-6-98765453"
