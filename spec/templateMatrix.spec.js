@@ -30,6 +30,20 @@ describe('templateMatrix', () => {
     });
   });
 
+  describe('validate', () => {
+    const template = new templatMatrixClass();
+
+    it("be invalid", function() {
+      const err = template.validate(require('../spec/mocks/template.invalid'));
+      expect(err.indexOf('ValidationError')).toEqual(0);
+    });
+    it("be valid", function() {
+      const err = template.validate(require('../spec/mocks/template.valid'));
+      expect(err).toEqual(true);
+    });
+
+  });
+
   describe('read string', function() {
     const tmp = new templatMatrixClass();
     const json = `{
@@ -116,9 +130,8 @@ describe('templateMatrix', () => {
     rec.markByShare(shareId);
     const result = template.export(rec);
     it('to have an id', () => {
-      console.log(result);
+    //  console.log(result);
       expect(result.A).toEqual('1234');
     })
   })
-
 });
