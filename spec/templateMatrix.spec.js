@@ -4,6 +4,7 @@
 "use strict";
 const templatMatrixClass = require('../lib/templateMatrix');
 const RecordClass = require('../lib/flexRecord');
+require('expectations');
 
 describe('templateMatrix', () => {
   describe('read file', function() {
@@ -103,4 +104,17 @@ describe('templateMatrix', () => {
 
     });
   });
+/*
+  describe('export', () => {
+    const template = new templatMatrixClass();
+    template.readFile('../spec/template.json');
+    let rec = new RecordClass();
+    const data = require('../spec/flexRecord');
+    const result = template.export(data);
+    it('to have an id', () => {
+      console.log(result);
+      expect(result.A).toEqual('123');
+    })
+  })
+  */
 });

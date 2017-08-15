@@ -9,6 +9,7 @@
 const FlexRecordClass = require('../lib/flexRecord');
 const templatMatricClass = require('../lib/templateMatrix');
 const _ = require('lodash');
+require('expectations');
 
 describe("flexRecord 1", function() {
 
@@ -120,7 +121,7 @@ describe("flexRecord 1", function() {
       expect(fieldRow.errors()).toEqual([]);
     });
     it('to find by name', function() {
-      console.log('RES', fieldRow.get('id'));
+      // console.log('RES', fieldRow.get('id'));
       expect(fieldRow.get('id').refId).toEqual('id');
       expect(fieldRow.get('telephone').refId).toEqual('telephone');
       expect(fieldRow.get('not a field')).toEqual(false);
@@ -488,4 +489,13 @@ describe('flexRecord.missing fields', () => {
 
 });
 
+describe('flexRecord.filterByShare', () => {
+  let fr = new FlexRecordClass();
+  fr.fields(require('../spec/mocks/flexRecord'));
+  const shareId = fr.items[0].ref[0].shareRowId;
+  it('mark refId', () =>{
+    const filtered = fr.markByShare(shareId);
+    expect(filtered).toEqual(5);
+  })
 
+});
