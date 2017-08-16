@@ -510,6 +510,29 @@ describe('flexRecord.id', () => {
     fr.id = '456';
     expect(fr.items.length).toEqual(1);
     expect(fr.id).toEqual('456');
-
   })
+});
+
+describe('flexRecord.findByType', () => {
+  const rec = new FlexRecordClass();
+  rec.fields(require('../spec/mocks/flexRecord'));
+  rec.markByShare('598459f2fe5947ead9ea813a');
+  it('email', ()=>{
+    const email = rec.findByType('email');
+    expect(email.length).toEqual(1);
+  });
+  it('telephone', ()=>{
+    const email = rec.findByType('telephone');
+    expect(email.length).toEqual(2);
+  });
+  it('telephone', ()=>{
+    const email = rec.findByType('telephone', {markedOnly: false});
+    expect(email.length).toEqual(3);
+  });
+
+  it('unknown', ()=>{
+    const email = rec.findByType('xx');
+    expect(email.length).toEqual(0);
+  })
+
 });
