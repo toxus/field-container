@@ -500,3 +500,16 @@ describe('flexRecord.filterByShare', () => {
   })
 
 });
+
+describe('flexRecord.id', () => {
+  let fr = new FlexRecordClass();
+  it('set', () => {
+    fr.id = '123';
+    expect(fr.items.length).toEqual(1);
+    expect(fr.id).toEqual('123');
+    fr.id = '456';
+    expect(fr.items.length).toEqual(1);
+    expect(fr.id).toEqual('456');
+
+  })
+});
