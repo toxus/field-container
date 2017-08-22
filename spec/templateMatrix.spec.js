@@ -104,7 +104,7 @@ describe('templateMatrix', () => {
         D: 'Bastard',
         E: 'Google',
         F: 'john@checkit.com',
-        G: '0612345678',
+  //      G: '0612345678',  // test for optional parameter
         H: '',
         I: 'Nowhere',
         J: '1234',

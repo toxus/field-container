@@ -40,7 +40,7 @@
       "fieldType" : "telephone",
       "select" : "#this",
       "data" : {
-        "value" : "G"
+        "value" : "G?"
       }
     },
     {
