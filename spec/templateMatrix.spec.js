@@ -132,6 +132,7 @@ describe('templateMatrix', () => {
     it('to have an id', () => {
     //  console.log(result);
       expect(result.A).toEqual('1234');
+      expect(result.F).toEqual("info@example.com")
     })
   })
 });
